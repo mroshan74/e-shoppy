@@ -15,7 +15,13 @@ productControllers.show = (req,res) => {
 }
 
 productControllers.list = (req,res) => {
+    const limit = req.query.limit ? parseInt(req.query.limit) : 8
+    const sortType = req.query.sortType ? req.query.sortType : 'desc'
+    const sortBy = req.query.sortBy ? req.query.sortBy : '_id'
     Product.find()
+        .populate('category')
+        .limit(limit)
+        .sort({[sortBy]: sortType})
         .then(lists => {
             res.json(lists)
         })
@@ -243,6 +249,31 @@ productControllers.destroy = (req,res) => {
         })
         res.json(product)
     }).catch(err => res.json(err))
+}
+
+
+productControllers.updateStock = (req,res,next) => {
+    let updateStockOperation = req.body.order.products.map(product => {
+        return {
+            updateOne: {
+                filter: { _id: product._id },
+                update: { $inc: {
+                    sold: +product.quantity,
+                    stock: -product.quantity,
+                }}
+            }
+        }
+    })
+
+    Product.bulkWrite(updateStockOperation, {}, (err,products) => {
+        if(err){
+            return res.status(400).json({
+                success: false,
+                errors: 'Bulk operation failed',
+                message: 'Unable to update stocks by order'
+            })
+        }
+    })
 }
 
 module.exports = productControllers
