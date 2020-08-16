@@ -6,6 +6,8 @@ const morgan = require('morgan')
 app.use(express.json())
 app.use(morgan('dev'))
 
+app.use(express.static('uploads'))
+
 const cookieParser = require('cookie-parser')
 app.use(cookieParser())
 

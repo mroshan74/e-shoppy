@@ -8,6 +8,7 @@ const isAdmin = require('../app/middlewares/isAdmin')
 const authControllers = require('../app/controllers/authControllers')
 const userControllers = require('../app/controllers/userControllers')
 const categoryControllers = require('../app/controllers/categoryControllers')
+const productControllers = require('../app/controllers/productControllers')
 
 // user auth and state status routes
 router.post('/users/register',authControllers.register)
@@ -27,5 +28,11 @@ router.post('/category/create', authenticateUser, isAdmin, categoryControllers.c
 router.put('/category/update/:id', authenticateUser, isAdmin, categoryControllers.update)
 router.delete('/category/delete/:id', authenticateUser, isAdmin, categoryControllers.destroy)
 
+// product routes
+router.get('/products', authenticateUser, productControllers.list)
+router.get('/product/:id', authenticateUser, productControllers.show)
+router.post('/product/create', authenticateUser, isAdmin, productControllers.create)
+router.put('/product/update/:id', authenticateUser, isAdmin, productControllers.update)
+router.delete('/product/delete/:id', authenticateUser, isAdmin, productControllers.destroy)
 
 module.exports = router

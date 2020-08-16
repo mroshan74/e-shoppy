@@ -5,7 +5,7 @@ const productSchema = new Schema({
     name: {
         type: String,
         required: true,
-        unique: true,
+        //unique: true,
         maxlength: 32,
     },
     description: {
@@ -30,8 +30,9 @@ const productSchema = new Schema({
         type: Number,
         default: 0,
     },
-    photo: {
-        data: Buffer,
+    image: {
+        fileName: String,
+        path: String,
         contentType: String,
     }
 },{timestamps: true})
