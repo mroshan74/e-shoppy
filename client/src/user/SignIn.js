@@ -2,12 +2,13 @@ import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { startUserSignIn } from '../store/actions/userActions'
+import { isAdmin } from '../auth/isAuth'
 
 const SignIn = (props) => {
     const history = useHistory()
     const [values, setValues] = useState({
-        email: '',
-        password: '',
+        email: 'test000@gmail.com',
+        password: 'secret123',
         errors: '',
         ok: false,
         loading: false
@@ -25,7 +26,12 @@ const SignIn = (props) => {
             email, password
         }
         const redirect = () => {
-            history.push('/')
+            if(isAdmin()){
+                history.push('/admin/dashboard')
+            }
+            else{
+                history.push('/user/dashboard')
+            }
         }
         console.log(fd)
         const regState = (res) => {

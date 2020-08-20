@@ -5,7 +5,7 @@ const URL = window.location.origin.includes('localhost') ? process.env.REACT_APP
 const axios = Axios.create({
     baseURL: URL,
     headers: {
-        "x-auth": localStorage.getItem('authToken')
+        "x-auth": JSON.parse(localStorage.getItem('authToken'))?.token
     }
 })
 

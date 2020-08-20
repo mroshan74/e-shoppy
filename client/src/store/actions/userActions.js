@@ -52,8 +52,8 @@ export const startUserSignIn = (fd, regState, redirect) => {
             errors: 'Registration failed',
           })
       } else {
-        let authToken = response.data.token
-        localStorage.setItem('token', authToken)
+        let authToken = JSON.stringify(response.data)
+        localStorage.setItem('authToken', authToken)
         dispatch(setUserData(response.data.user))
         regState({
           ok: true,
@@ -81,7 +81,7 @@ export const startUserSignIn = (fd, regState, redirect) => {
 }
 
 export const clearUserData = () => {
-  return { type: 'CLEAR_USER ' }
+  return { type: 'CLEAR_USER' }
 }
 
 export const startUserSignOut = (fd) => {
@@ -91,7 +91,7 @@ export const startUserSignOut = (fd) => {
       .then((response) => {
         console.log(response.data)
         dispatch(clearUserData())
-        localStorage.removeItem('token')
+        localStorage.removeItem('authToken')
         window.location.href = '/'
       })
       .catch((err) => console.log(err))
