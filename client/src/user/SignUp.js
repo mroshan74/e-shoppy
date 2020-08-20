@@ -1,10 +1,9 @@
 import React, { Fragment, useState } from 'react'
 import { connect } from 'react-redux'
-import { useHistory } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { startUserSignUp } from '../store/actions/userActions'
 
 const SignUp = (props) => {
-    const history = useHistory()
     const [values, setValues] = useState({
         fullName: '',
         email: '',
@@ -15,8 +14,7 @@ const SignUp = (props) => {
     const handleChange = (e) => {
         setValues({
             ...values,
-            [e.target.name]:e.target.value,
-            error: false
+            [e.target.name]:e.target.value
         })
     }
     const handleSubmit = (e) => {
@@ -25,9 +23,7 @@ const SignUp = (props) => {
         const fd = {
             fullName, email, password
         }
-        const redirect = () => {
-            history.push('/user/signin')
-        }
+
         console.log(fd)
         const regState = (res) => {
             if(res.ok){
@@ -48,13 +44,19 @@ const SignUp = (props) => {
                 })
             }
         }
-        props.dispatch(startUserSignUp(fd,regState,redirect))
+        props.dispatch(startUserSignUp(fd,regState))
     }
 
     const signUpForm = () => (
         <div className="row m-0">
                 <div className="col-md-6 offset-sm-3 mt-5 text-left">
                     <h3 className="text-center">Sign Up</h3>
+                    <div className="alert alert-success" style={{display: values.ok ? '': 'none'}}>
+                        Registered successfully. Please <Link to='/user/signin'>sign-in</Link> here.
+                    </div>
+                    <div className="alert alert-danger" style={{display: values.errors ? '': 'none'}}>
+                        {values.errors}
+                    </div>
                     <form className="mt-3" onSubmit={handleSubmit}>
                         <div className="form-group">
                             <label htmlFor="fullName" className="text-grey">Full name</label>
@@ -64,6 +66,7 @@ const SignUp = (props) => {
                                 type="text" 
                                 id="fullName"
                                 onChange={handleChange}
+                                value={values.fullName}
                             />
                         </div>
                         <div className="form-group">
@@ -74,6 +77,7 @@ const SignUp = (props) => {
                                 type="email" 
                                 id="email"
                                 onChange={handleChange}
+                                value={values.email}
                             />
                         </div>
                         <div className="form-group">
@@ -84,6 +88,7 @@ const SignUp = (props) => {
                                 type="password" 
                                 id="password"
                                 onChange={handleChange}
+                                value={values.password}
                             />
                         </div>
                         <button className="btn btn-success btn-block">Submit</button>

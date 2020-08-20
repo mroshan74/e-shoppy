@@ -1,26 +1,38 @@
 import axios from '../../config/axios'
 
-export const startUserSignUp = (fd, regState, redirect) => {
+export const startUserSignUp = (fd, regState) => {
   return () => {
     axios
       .post(`/users/register`, fd)
       .then((response) => {
-        if (response.hasOwnProperty('keyPattern')) {
-          if (response.keyPattern.email === 1) {
+        console.log(response.data)
+        if (response.hasOwnProperty('errors')) {
             regState({
               ok: false,
-              errors: 'email already exists',
+              errors: 'Registration failed',
             })
-          }
         } else {
-          alert('Successfully registered')
           regState({
             ok: true,
           })
-          redirect()
         }
       })
-      .catch((err) => console.log(err))
+      .catch((err) => {
+        console.log(err,err.response,err.response.data)
+        if(err.response.data.keyPattern.email){
+          //console.log('email exists')
+          regState({
+            ok: false,
+            errors: 'Email already registered',
+          })
+        }
+        else{
+          regState({
+            ok: false,
+            errors: 'Registration failed',
+          })
+        }
+      })
   }
 }
 
@@ -28,19 +40,43 @@ export const setUserData = (data) => {
   return { type: 'SET_USER', payload: data }
 }
 
-export const startUserSignIn = (fd, redirect) => {
+export const startUserSignIn = (fd, regState, redirect) => {
   return (dispatch) => {
     axios
       .post(`/users/login`, fd)
       .then((response) => {
         console.log(response.data)
+        if (response.hasOwnProperty('errors')) {
+          regState({
+            ok: false,
+            errors: 'Registration failed',
+          })
+      } else {
         let authToken = response.data.token
         localStorage.setItem('token', authToken)
         dispatch(setUserData(response.data.user))
+        regState({
+          ok: true,
+        })
         redirect()
-        window.location.reload()
+      }
+        //window.location.reload()
       })
-      .catch((err) => console.log(err))
+      .catch((err) => {
+        if(err.response.data.hasOwnProperty('errors')){
+          //console.log('email exists')
+          regState({
+            ok: false,
+            errors: err.response.data.message,
+          })
+        }
+        else{
+          regState({
+            ok: false,
+            errors: err.message,
+          })
+        }
+      })
   }
 }
 

@@ -6,10 +6,11 @@ const authControllers = {}
 
 authControllers.register = (req,res) => {
     const body = req.body
-    console.log(body)
+    //console.log(body)
     const user = new User(body)
     user.save()
         .then(user => {
+            //console.log(user,'user')
             res.json({
                 _id: user._id,
                 fullName: user.fullName,
@@ -21,8 +22,9 @@ authControllers.register = (req,res) => {
             res.status(400).json({
                 errors: 'Operation failed',
                 message: 'Failed to save user',
+                ...err
+            })
         })
-    })
 }
 
 authControllers.login = (req,res) => {
@@ -45,7 +47,7 @@ authControllers.login = (req,res) => {
                                     email: user.email
                                 }
                             const token = jwt.sign(tokenData, process.env.JWT_SECRET)
-                            res.cookie('token',token, { expire: new Date() + 9999 })
+                            //res.cookie('token',token, { expire: new Date() + 9999 })
                             const { _id, fullName, email, role } = user
                             res.json({ token, user: { _id, fullName, email, role } })
                         }

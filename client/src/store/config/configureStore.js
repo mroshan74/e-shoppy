@@ -6,7 +6,6 @@ import userReducers from '../reducers/userReducers'
 const configureStore = () => {
     const store = createStore(combineReducers({
         user: userReducers,
-
     }),applyMiddleware(thunk))
     return store
 }
