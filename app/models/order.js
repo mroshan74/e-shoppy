@@ -11,6 +11,11 @@ const orderSchema = new Schema({
     user: {
         type: Schema.Types.ObjectId,
         ref: 'User'
+    },
+    status: {
+        type: String,
+        default: 'Received',
+        enum: ['Cancelled', 'Delivered', 'Received', 'Shipped', 'Processing']
     }
 },{timestamps: true})
 

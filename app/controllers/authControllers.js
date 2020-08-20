@@ -6,6 +6,7 @@ const authControllers = {}
 
 authControllers.register = (req,res) => {
     const body = req.body
+    console.log(body)
     const user = new User(body)
     user.save()
         .then(user => {
@@ -16,7 +17,7 @@ authControllers.register = (req,res) => {
             })
         })
         .catch(err => {
-            console.log(err)
+            //console.log(err)
             res.status(400).json({
                 errors: 'Operation failed',
                 message: 'Failed to save user',

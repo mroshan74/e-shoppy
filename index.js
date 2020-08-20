@@ -2,6 +2,8 @@ const express = require('express')
 const app = express()
 const port = process.env.PORT || 6500
 const morgan = require('morgan')
+const cors = require('cors')
+app.use(cors())
 
 app.use(express.json())
 app.use(morgan('dev'))

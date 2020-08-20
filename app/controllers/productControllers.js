@@ -252,28 +252,28 @@ productControllers.destroy = (req,res) => {
 }
 
 
-productControllers.updateStock = (req,res,next) => {
-    let updateStockOperation = req.body.order.products.map(product => {
-        return {
-            updateOne: {
-                filter: { _id: product._id },
-                update: { $inc: {
-                    sold: +product.quantity,
-                    stock: -product.quantity,
-                }}
-            }
-        }
-    })
+// productControllers.updateStock = (req,res,next) => {
+//     let updateStockOperation = req.body.order.products.map(product => {
+//         return {
+//             updateOne: {
+//                 filter: { _id: product._id },
+//                 update: { $inc: {
+//                     sold: +product.quantity,
+//                     stock: -product.quantity,
+//                 }}
+//             }
+//         }
+//     })
 
-    Product.bulkWrite(updateStockOperation, {}, (err,products) => {
-        if(err){
-            return res.status(400).json({
-                success: false,
-                errors: 'Bulk operation failed',
-                message: 'Unable to update stocks by order'
-            })
-        }
-    })
-}
+//     Product.bulkWrite(updateStockOperation, {}, (err,products) => {
+//         if(err){
+//             return res.status(400).json({
+//                 success: false,
+//                 errors: 'Bulk operation failed',
+//                 message: 'Unable to update stocks by order'
+//             })
+//         }
+//     })
+// }
 
 module.exports = productControllers

@@ -9,6 +9,7 @@ const authControllers = require('../app/controllers/authControllers')
 const userControllers = require('../app/controllers/userControllers')
 const categoryControllers = require('../app/controllers/categoryControllers')
 const productControllers = require('../app/controllers/productControllers')
+const orderControllers = require('../app/controllers/orderControllers')
 
 // user auth and state status routes
 router.post('/users/register',authControllers.register)
@@ -34,5 +35,12 @@ router.get('/product/:id', authenticateUser, productControllers.show)
 router.post('/product/create', authenticateUser, isAdmin, productControllers.create)
 router.put('/product/update/:id', authenticateUser, isAdmin, productControllers.update)
 router.delete('/product/delete/:id', authenticateUser, isAdmin, productControllers.destroy)
+
+//order routes
+router.get('/orders', authenticateUser, orderControllers.list)
+router.get('/order/:id', authenticateUser, orderControllers.show)
+router.post('/order/create', authenticateUser, orderControllers.create)
+router.put('/order/update/:id', authenticateUser, isAdmin, orderControllers.update)
+// router.delete('/product/delete/:id', authenticateUser, isAdmin, productControllers.destroy)
 
 module.exports = router
